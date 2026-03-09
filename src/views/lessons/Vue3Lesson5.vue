@@ -17,7 +17,7 @@
 
         <div class="info-box">
           <h3>基本语法</h3>
-          <pre><code>&lt;li v-for="item in items" :key="item.id"&gt;
+          <pre v-pre><code>&lt;li v-for="item in items" :key="item.id"&gt;
   {{ item.name }}
 &lt;/li&gt;</code></pre>
         </div>
@@ -38,7 +38,7 @@
             </div>
             <div class="code-display">
               <h4>代码：</h4>
-              <pre><code>&lt;ul&gt;
+              <pre v-pre><code>&lt;ul&gt;
   &lt;li v-for="(fruit, index) in fruits" :key="index"&gt;
     {{ index + 1 }}. {{ fruit.name }} {{ fruit.emoji }} ¥{{ fruit.price }}
   &lt;/li&gt;
@@ -87,7 +87,7 @@ const fruits = [
             </div>
             <div class="code-display">
               <h4>代码：</h4>
-              <pre><code>&lt;div v-for="(value, key) in userInfo" :key="key"&gt;
+              <pre v-pre><code>&lt;div v-for="(value, key) in userInfo" :key="key"&gt;
   {{ key }}: {{ value }}
 &lt;/div&gt;
 
@@ -157,7 +157,7 @@ const userInfo = {
             <div class="practice-item good">
               <div class="practice-icon">✅</div>
               <h4>推荐做法</h4>
-              <pre><code>&lt;li v-for="item in items" :key="item.id"&gt;
+              <pre v-pre><code>&lt;li v-for="item in items" :key="item.id"&gt;
   {{ item.name }}
 &lt;/li&gt;</code></pre>
               <p>使用唯一标识符作为 key</p>
@@ -166,7 +166,7 @@ const userInfo = {
             <div class="practice-item bad">
               <div class="practice-icon">❌</div>
               <h4>不推荐</h4>
-              <pre><code>&lt;li v-for="(item, index) in items" :key="index"&gt;
+              <pre v-pre><code>&lt;li v-for="(item, index) in items" :key="index"&gt;
   {{ item.name }}
 &lt;/li&gt;</code></pre>
               <p>使用索引作为 key（除非列表是静态的）</p>
@@ -242,7 +242,7 @@ const userInfo = {
         <div class="warning-box">
           <strong>⚠️ 注意事项：</strong>
           <p>以下操作<strong>不会</strong>触发视图更新：</p>
-          <pre><code>// ❌ 直接索引赋值
+          <pre v-pre><code>// ❌ 直接索引赋值
 items[0] = newValue
 
 // ✅ 使用 splice
@@ -272,14 +272,14 @@ items = []</code></pre>
           <div class="comparison-grid">
             <div class="comparison-item bad">
               <h4>❌ 不推荐</h4>
-              <pre><code>&lt;li v-for="user in users" v-if="user.isActive"&gt;
+              <pre v-pre><code>&lt;li v-for="user in users" v-if="user.isActive"&gt;
   {{ user.name }}
 &lt;/li&gt;</code></pre>
             </div>
 
             <div class="comparison-item good">
               <h4>✅ 推荐方案1：使用计算属性</h4>
-              <pre><code>&lt;li v-for="user in activeUsers" :key="user.id"&gt;
+              <pre v-pre><code>&lt;li v-for="user in activeUsers" :key="user.id"&gt;
   {{ user.name }}
 &lt;/li&gt;
 
@@ -292,7 +292,7 @@ const activeUsers = computed(() => {
 
             <div class="comparison-item good">
               <h4>✅ 推荐方案2：使用 template</h4>
-              <pre><code>&lt;template v-for="user in users" :key="user.id"&gt;
+              <pre v-pre><code>&lt;template v-for="user in users" :key="user.id"&gt;
   &lt;li v-if="user.isActive"&gt;
     {{ user.name }}
   &lt;/li&gt;

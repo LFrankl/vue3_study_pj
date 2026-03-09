@@ -1,4 +1,4 @@
-# 前端学习平台
+# front-end-study
 
 一个基于 Vue3 的交互式前端学习网站，提供**系统化课程**和**快速教程**两种学习模式。
 
@@ -68,54 +68,60 @@
 
 ### 安装依赖
 
-\`\`\`bash
+```bash
 npm install
-\`\`\`
+```
 
 ### 启动开发服务器
 
-\`\`\`bash
+```bash
 npm run dev
-\`\`\`
+```
 
 访问 http://localhost:3000 查看网站
 
 ### 构建生产版本
 
-\`\`\`bash
+```bash
 npm run build
-\`\`\`
+```
 
 ### 预览生产版本
 
-\`\`\`bash
+```bash
 npm run preview
-\`\`\`
+```
 
 ## 项目结构
 
-\`\`\`
-vue3_paper_search/
-├── index.html              # HTML 入口
-├── package.json            # 依赖配置
-├── vite.config.js          # Vite 配置
+```text
+vue3_study_pj/
+├── index.html               # HTML 入口
+├── package.json             # 依赖配置
+├── vite.config.js           # Vite 配置
 ├── src/
-│   ├── main.js            # 应用入口
-│   ├── App.vue            # 根组件
+│   ├── main.js              # 应用入口
+│   ├── App.vue              # 根组件
 │   ├── router/
-│   │   └── index.js       # 路由配置
+│   │   └── index.js         # 路由配置
 │   ├── components/
-│   │   ├── Navbar.vue     # 导航栏
-│   │   └── Sidebar.vue    # 侧边栏（支持展开/折叠）
+│   │   ├── Navbar.vue       # 导航栏
+│   │   ├── Sidebar.vue      # 侧边栏
+│   │   ├── LessonLayout.vue # 课程通用布局
+│   │   └── CodeEditor.vue   # 在线代码编辑器
 │   ├── views/
-│   │   ├── Home.vue       # 首页
-│   │   └── lessons/       # 系统化课程
-│   │       ├── HTMLLesson1-12.vue    # HTML 课程
-│   │       └── Vue3Lesson1-6.vue     # Vue3 课程
+│   │   ├── Home.vue         # 首页
+│   │   ├── TestInteractive.vue
+│   │   └── lessons/         # 课程页面
+│   ├── data/
+│   │   └── curriculum.js    # 课程数据
 │   └── styles/
-│       └── global.css     # 全局样式
-└── STYLE.md              # UI 设计规范
-\`\`\`
+│       └── global.css       # 全局样式
+├── .github/
+│   └── workflows/
+│       └── deploy.yml       # GitHub Pages 部署
+└── README.md
+```
 
 ## 设计规范
 
