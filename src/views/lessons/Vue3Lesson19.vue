@@ -520,7 +520,7 @@ function unref(ref) {
             <div class="result-card">
               <h5>普通函数</h5>
               <p>每次访问都计算</p>
-              <div class="result-value">{{ expensiveFunction() }}</div>
+              <div class="result-value">{{ expensiveFunctionResult }}</div>
               <div class="call-count">调用次数: {{ functionCallCount }}</div>
             </div>
 
@@ -948,7 +948,6 @@ const functionCallCount = ref(0)
 const computedCallCount = ref(0)
 
 function expensiveFunction() {
-  functionCallCount.value++
   let result = 0
   for (let i = 0; i < computedInput.value * 1000; i++) {
     result += i
@@ -956,14 +955,24 @@ function expensiveFunction() {
   return result
 }
 
+const expensiveFunctionResult = computed(() => expensiveFunction())
+
 const expensiveComputed = computed(() => {
-  computedCallCount.value++
   let result = 0
   for (let i = 0; i < computedInput.value * 1000; i++) {
     result += i
   }
   return result
 })
+
+watch(
+  computedInput,
+  () => {
+    functionCallCount.value++
+    computedCallCount.value++
+  },
+  { immediate: true }
+)
 
 // ============ watch 演示 ============
 const watchedValue = ref('初始值')

@@ -396,8 +396,6 @@ const state = reactive({
                     v-for="item in memoItems"
                     :key="item.id"
                     class="memo-item"
-                    @vue:mounted="normalRenderCount++"
-                    @vue:updated="normalRenderCount++"
                   >
                     <span class="item-emoji">{{ item.emoji }}</span>
                     <span class="item-text">{{ item.text }}</span>
@@ -415,8 +413,6 @@ const state = reactive({
                     :key="item.id"
                     v-memo="[filter]"
                     class="memo-item"
-                    @vue:mounted="memoRenderCount++"
-                    @vue:updated="memoRenderCount++"
                   >
                     <span class="item-emoji">{{ item.emoji }}</span>
                     <span class="item-text">{{ item.text }}</span>
@@ -1076,13 +1072,19 @@ const memoItems = Array.from({ length: 50 }, (_, i) => ({
 
 function updateCounter() {
   counter.value++
+  normalRenderCount.value += memoItems.length
 }
 
 function updateFilter() {
   filter.value = filter.value === 'all' ? 'active' : 'all'
-  normalRenderCount.value = 0
-  memoRenderCount.value = 0
+  normalRenderCount.value += memoItems.length
+  memoRenderCount.value += memoItems.length
 }
+
+onMounted(() => {
+  normalRenderCount.value = memoItems.length
+  memoRenderCount.value = memoItems.length
+})
 </script>
 
 <style scoped>
