@@ -1,0 +1,1073 @@
+<template>
+  <div class="lesson-container">
+    <div class="lesson-header">
+      <h1>第56课：计算属性与侦听器</h1>
+      <p class="lesson-subtitle">深入理解 computed 计算属性和 watch 侦听器的使用场景和最佳实践</p>
+    </div>
+
+    <div class="lesson-content">
+      <!-- 计算属性 computed -->
+      <section class="content-section">
+        <h2>计算属性 computed</h2>
+        <p>计算属性是基于响应式依赖进行<strong>缓存</strong>的属性。它会根据依赖的响应式数据自动更新，并且只有在相关依赖发生改变时才会重新计算。</p>
+
+        <div class="info-box">
+          <h3>为什么需要计算属性？</h3>
+          <p>在模板中使用复杂的表达式会让代码难以维护。计算属性让你可以把复杂逻辑提取出来，使模板保持简洁。</p>
+
+          <div class="comparison-code">
+            <div class="code-bad">
+              <h4>❌ 不推荐：模板中写复杂表达式</h4>
+              <pre v-pre><code>&lt;p&gt;{{ message.split('').reverse().join('') }}&lt;/p&gt;</code></pre>
+            </div>
+            <div class="code-good">
+              <h4>✅ 推荐：使用计算属性</h4>
+              <pre v-pre><code>&lt;p&gt;{{ reversedMessage }}&lt;/p&gt;
+
+const reversedMessage = computed(() => {
+  return message.value.split('').reverse().join('')
+})</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <h3>基础用法示例</h3>
+        <CodeEditor
+          :initial-html="computedBasicHTML"
+          :initial-css="''"
+          :initial-js="''"
+          :auto-run="true"
+        />
+
+        <h3>🎯 交互演示：computed vs methods</h3>
+        <p>计算属性与方法的主要区别在于<strong>缓存</strong>。计算属性只有在依赖变化时才重新计算，而方法每次调用都会执行。</p>
+
+        <div class="demo-box">
+          <div class="comparison-demo">
+            <div class="demo-column">
+              <h4>使用计算属性（有缓存）</h4>
+              <p>当前时间戳: {{ currentTime }}</p>
+              <p>计算属性调用: {{ computedValue }}</p>
+              <p>再次调用: {{ computedValue }}</p>
+              <p>第三次: {{ computedValue }}</p>
+              <button @click="updateCounter" class="demo-button">更新计数器: {{ counter }}</button>
+              <p class="note">📝 注意：即使多次访问，计算属性只执行一次</p>
+            </div>
+
+            <div class="demo-column">
+              <h4>使用方法（无缓存）</h4>
+              <p>当前时间戳: {{ currentTime }}</p>
+              <p>方法调用: {{ methodValue() }}</p>
+              <p>再次调用: {{ methodValue() }}</p>
+              <p>第三次: {{ methodValue() }}</p>
+              <button @click="updateCounter" class="demo-button">更新计数器: {{ counter }}</button>
+              <p class="note">📝 注意：每次访问都会重新执行方法</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <strong>💡 使用建议：</strong>
+          <ul>
+            <li>需要<strong>依赖响应式数据</strong>并且<strong>需要缓存</strong>时，使用 computed</li>
+            <li>需要<strong>传递参数</strong>或<strong>每次都执行</strong>时，使用 methods</li>
+            <li>computed 更适合<strong>复杂计算</strong>和<strong>数据转换</strong></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 可写计算属性 -->
+      <section class="content-section">
+        <h2>可写计算属性</h2>
+        <p>计算属性默认是只读的，但你也可以提供 getter 和 setter 来创建可写的计算属性。</p>
+
+        <CodeEditor
+          :initial-html="writableComputedHTML"
+          :initial-css="''"
+          :initial-js="''"
+          :auto-run="true"
+        />
+      </section>
+
+      <!-- watch 侦听器 -->
+      <section class="content-section">
+        <h2>watch 侦听器</h2>
+        <p>侦听器用于在响应式数据变化时执行<strong>副作用</strong>（如异步操作、DOM 操作等）。与 computed 不同，watch 不返回值，而是执行回调函数。</p>
+
+        <div class="info-box">
+          <h3>computed vs watch 的选择</h3>
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>特性</th>
+                <th>computed 计算属性</th>
+                <th>watch 侦听器</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>用途</strong></td>
+                <td>计算派生数据</td>
+                <td>执行副作用操作</td>
+              </tr>
+              <tr>
+                <td><strong>返回值</strong></td>
+                <td>必须返回值</td>
+                <td>不返回值</td>
+              </tr>
+              <tr>
+                <td><strong>缓存</strong></td>
+                <td>有缓存</td>
+                <td>无缓存</td>
+              </tr>
+              <tr>
+                <td><strong>使用场景</strong></td>
+                <td>模板渲染、数据转换</td>
+                <td>API 调用、日志记录</td>
+              </tr>
+              <tr>
+                <td><strong>依赖追踪</strong></td>
+                <td>自动追踪</td>
+                <td>手动指定</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>watch 基础用法</h3>
+        <CodeEditor
+          :initial-html="watchBasicHTML"
+          :initial-css="''"
+          :initial-js="''"
+          :auto-run="true"
+        />
+
+        <h3>深度侦听与立即执行</h3>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h4>deep: true - 深度侦听</h4>
+            <pre v-pre><code>watch(
+  obj,
+  (newVal) => {
+    console.log('对象内部变化了')
+  },
+  { deep: true }
+)</code></pre>
+            <p>侦听对象内部属性的变化</p>
+          </div>
+
+          <div class="feature-card">
+            <h4>immediate: true - 立即执行</h4>
+            <pre v-pre><code>watch(
+  source,
+  (newVal) => {
+    console.log('立即执行一次')
+  },
+  { immediate: true }
+)</code></pre>
+            <p>组件创建时立即执行一次回调</p>
+          </div>
+        </div>
+
+        <CodeEditor
+          :initial-html="watchDeepHTML"
+          :initial-css="''"
+          :initial-js="''"
+          :auto-run="true"
+        />
+      </section>
+
+      <!-- watchEffect -->
+      <section class="content-section">
+        <h2>watchEffect - 自动依赖追踪</h2>
+        <p><code>watchEffect</code> 会自动追踪回调函数中使用的所有响应式依赖，无需手动指定侦听源。</p>
+
+        <div class="info-box">
+          <h3>watch vs watchEffect</h3>
+          <div class="comparison-code">
+            <div class="code-column">
+              <h4>watch - 需要明确指定依赖</h4>
+              <pre v-pre><code>watch(
+  [source1, source2],
+  ([new1, new2]) => {
+    console.log(new1, new2)
+  }
+)</code></pre>
+            </div>
+            <div class="code-column">
+              <h4>watchEffect - 自动追踪依赖</h4>
+              <pre v-pre><code>watchEffect(() => {
+  console.log(source1.value)
+  console.log(source2.value)
+  // 自动侦听所有用到的响应式数据
+})</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <CodeEditor
+          :initial-html="watchEffectHTML"
+          :initial-css="''"
+          :initial-js="''"
+          :auto-run="true"
+        />
+
+        <div class="tip-box">
+          <strong>💡 使用建议：</strong>
+          <ul>
+            <li>当你需要根据某些状态<strong>同步执行副作用</strong>时，使用 watchEffect</li>
+            <li>当你需要<strong>访问旧值</strong>或<strong>精确控制依赖</strong>时，使用 watch</li>
+            <li>watchEffect 在组件初始化时会<strong>立即执行一次</strong></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 综合实战 -->
+      <section class="content-section">
+        <h2>🎯 综合实战：智能待办事项</h2>
+        <p>综合运用 computed 和 watch，创建一个功能完整的待办事项应用：</p>
+
+        <CodeEditor
+          :initial-html="todoAppHTML"
+          :initial-css="''"
+          :initial-js="''"
+          :auto-run="true"
+        />
+
+        <div class="highlight-box">
+          <h3>📌 这个例子展示了：</h3>
+          <ul>
+            <li>✅ 使用 <strong>computed</strong> 计算总数、活跃数、完成率等派生数据</li>
+            <li>✅ 使用 <strong>computed</strong> 过滤任务列表</li>
+            <li>✅ 使用 <strong>watch</strong> 监听数据变化并保存到 localStorage</li>
+            <li>✅ 使用 <strong>watch</strong> 监听完成率，达到100%时弹出祝贺</li>
+            <li>✅ 深度侦听对象数组的变化</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 总结 -->
+      <section class="content-section">
+        <h2>📚 本课总结</h2>
+        <div class="summary-box">
+          <h3>计算属性 computed</h3>
+          <ul>
+            <li>用于声明式地计算派生数据</li>
+            <li>基于响应式依赖进行缓存，只有依赖变化时才重新计算</li>
+            <li>必须返回一个值，通常用于模板渲染</li>
+            <li>可以提供 getter 和 setter 创建可写计算属性</li>
+            <li>适用场景：数据转换、过滤、排序、格式化等</li>
+          </ul>
+
+          <h3>侦听器 watch</h3>
+          <ul>
+            <li>用于在数据变化时执行副作用操作</li>
+            <li>需要手动指定侦听的数据源</li>
+            <li>可以访问新值和旧值</li>
+            <li>支持深度侦听（deep）和立即执行（immediate）</li>
+            <li>适用场景：API 调用、数据持久化、日志记录等</li>
+          </ul>
+
+          <h3>watchEffect</h3>
+          <ul>
+            <li>自动追踪回调中使用的所有响应式依赖</li>
+            <li>立即执行一次，并在依赖变化时重新执行</li>
+            <li>无法访问旧值</li>
+            <li>适用场景：简单的副作用操作，依赖关系明确的场景</li>
+          </ul>
+
+          <h3>选择建议</h3>
+          <ul>
+            <li>需要<strong>派生数据</strong> → computed</li>
+            <li>需要<strong>执行副作用</strong> → watch 或 watchEffect</li>
+            <li>需要<strong>访问旧值</strong> → watch</li>
+            <li>依赖关系<strong>简单明确</strong> → watchEffect</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 下一课预告 -->
+      <div class="next-lesson">
+        <h3>下一课预告</h3>
+        <p>第57课：条件渲染 - 掌握 v-if 和 v-show 的使用和性能优化</p>
+        <router-link to="/lessons/vue3/lesson-4" class="next-button">
+          前往下一课 →
+        </router-link>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue'
+import CodeEditor from '../../components/CodeEditor.vue'
+
+// computed vs methods 演示
+const currentTime = ref(Date.now())
+const counter = ref(0)
+
+const computedValue = computed(() => {
+  console.log('computed 执行了')
+  return `计算结果: ${currentTime.value}`
+})
+
+const methodValue = () => {
+  console.log('method 执行了')
+  return `方法结果: ${currentTime.value}`
+}
+
+const updateCounter = () => {
+  counter.value++
+}
+
+// 提取的HTML字符串常量
+const computedBasicHTML = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>计算属性基础</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"><\/script>
+  <style>
+    body { font-family: Arial; max-width: 600px; margin: 50px auto; padding: 20px; }
+    .card { background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+    input { width: 100%; padding: 10px; margin: 5px 0; border: 2px solid #ddd; border-radius: 4px; font-size: 16px; }
+    .result { background: #42b983; color: white; padding: 15px; border-radius: 4px; margin-top: 15px; font-size: 18px; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>购物车计算器</h1>
+    <div class="card">
+      <label>商品价格：</label>
+      <input v-model.number="price" type="number" placeholder="输入价格" />
+      <label>购买数量：</label>
+      <input v-model.number="quantity" type="number" placeholder="输入数量" />
+      <label>折扣率 (%)：</label>
+      <input v-model.number="discount" type="number" placeholder="输入折扣" />
+    </div>
+    <div class="result">
+      <p>原价：¥{{ originalTotal }}</p>
+      <p>折扣：{{ discount }}%</p>
+      <p>实付金额：¥{{ finalTotal }}</p>
+      <p>节省：¥{{ savedAmount }}</p>
+    </div>
+  </div>
+  <script>
+    const { createApp, ref, computed } = Vue;
+    createApp({
+      setup() {
+        const price = ref(100);
+        const quantity = ref(1);
+        const discount = ref(10);
+        const originalTotal = computed(() => (price.value * quantity.value).toFixed(2));
+        const finalTotal = computed(() => {
+          const total = price.value * quantity.value;
+          return (total * (1 - discount.value / 100)).toFixed(2);
+        });
+        const savedAmount = computed(() => (originalTotal.value - finalTotal.value).toFixed(2));
+        return { price, quantity, discount, originalTotal, finalTotal, savedAmount };
+      }
+    }).mount("#app");
+  <\/script>
+</body>
+</html>`
+
+const writableComputedHTML = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>可写计算属性</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"><\/script>
+  <style>
+    body { font-family: Arial; max-width: 600px; margin: 50px auto; padding: 20px; }
+    .name-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 12px; text-align: center; margin-bottom: 20px; }
+    .name-card h2 { margin: 0; font-size: 32px; }
+    input { width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #ddd; border-radius: 6px; font-size: 16px; }
+    .split-input { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>姓名编辑器</h1>
+    <div class="name-card"><h2>{{ fullName }}</h2></div>
+    <div><label><strong>方式一：直接编辑全名</strong></label>
+      <input v-model="fullName" placeholder="输入完整姓名" />
+    </div>
+    <div style="margin-top: 20px;"><label><strong>方式二：分别编辑</strong></label>
+      <div class="split-input">
+        <input v-model="firstName" placeholder="姓" />
+        <input v-model="lastName" placeholder="名" />
+      </div>
+    </div>
+    <p style="margin-top: 20px; color: #666;">💡 提示：两种方式都会同步更新。试试输入 "张 三"</p>
+  </div>
+  <script>
+    const { createApp, ref, computed } = Vue;
+    createApp({
+      setup() {
+        const firstName = ref("张");
+        const lastName = ref("三");
+        const fullName = computed({
+          get() { return firstName.value + " " + lastName.value; },
+          set(newValue) {
+            const names = newValue.split(" ");
+            firstName.value = names[0] || "";
+            lastName.value = names[1] || "";
+          }
+        });
+        return { firstName, lastName, fullName };
+      }
+    }).mount("#app");
+  <\/script>
+</body>
+</html>`
+
+const watchBasicHTML = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>watch 侦听器</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"><\/script>
+  <style>
+    body { font-family: Arial; max-width: 600px; margin: 50px auto; padding: 20px; }
+    .search-box { position: relative; margin-bottom: 20px; }
+    .search-box input { width: 100%; padding: 15px; font-size: 18px; border: 2px solid #ddd; border-radius: 8px; }
+    .loading { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #42b983; }
+    .history { background: #f9f9f9; padding: 15px; border-radius: 8px; max-height: 300px; overflow-y: auto; }
+    .history-item { padding: 10px; margin: 5px 0; background: white; border-radius: 4px; display: flex; justify-content: space-between; }
+    .timestamp { font-size: 12px; color: #999; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>搜索监听示例</h1>
+    <div class="search-box">
+      <input v-model="searchQuery" type="text" placeholder="输入搜索关键词..." />
+      <span v-if="isSearching" class="loading">🔍 搜索中...</span>
+    </div>
+    <p>已搜索 {{ searchCount }} 次</p>
+    <div class="history">
+      <h3>搜索历史</h3>
+      <div v-if="searchHistory.length === 0" style="text-align: center; color: #999;">暂无搜索记录</div>
+      <div v-for="(item, index) in searchHistory" :key="index" class="history-item">
+        <span>{{ item.query }}</span>
+        <span class="timestamp">{{ item.time }}</span>
+      </div>
+    </div>
+  </div>
+  <script>
+    const { createApp, ref, watch } = Vue;
+    createApp({
+      setup() {
+        const searchQuery = ref("");
+        const searchCount = ref(0);
+        const isSearching = ref(false);
+        const searchHistory = ref([]);
+        watch(searchQuery, (newQuery) => {
+          if (newQuery.trim()) {
+            isSearching.value = true;
+            searchCount.value++;
+            setTimeout(() => {
+              isSearching.value = false;
+              searchHistory.value.unshift({ query: newQuery, time: new Date().toLocaleTimeString() });
+              if (searchHistory.value.length > 10) searchHistory.value.pop();
+            }, 500);
+          }
+        });
+        return { searchQuery, searchCount, isSearching, searchHistory };
+      }
+    }).mount("#app");
+  <\/script>
+</body>
+</html>`
+
+const watchDeepHTML = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>深度侦听示例</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"><\/script>
+  <style>
+    body { font-family: Arial; max-width: 600px; margin: 50px auto; padding: 20px; }
+    .user-form { background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+    input { width: 100%; padding: 10px; margin: 5px 0 15px; border: 2px solid #ddd; border-radius: 4px; }
+    .save-indicator { background: #42b983; color: white; padding: 10px; border-radius: 4px; text-align: center; margin-top: 10px; }
+    .log { background: #1e1e1e; color: #0f0; padding: 15px; border-radius: 4px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>用户信息编辑器</h1>
+    <div class="user-form">
+      <label><strong>姓名：</strong></label>
+      <input v-model="user.name" />
+      <label><strong>邮箱：</strong></label>
+      <input v-model="user.email" />
+      <label><strong>年龄：</strong></label>
+      <input v-model.number="user.age" type="number" />
+      <div v-if="isSaving" class="save-indicator">💾 自动保存中...</div>
+    </div>
+    <h3>变化日志：</h3>
+    <div class="log"><div v-for="(log, index) in logs" :key="index">{{ log }}</div></div>
+  </div>
+  <script>
+    const { createApp, ref, reactive, watch } = Vue;
+    createApp({
+      setup() {
+        const user = reactive({ name: "张三", email: "zhangsan@example.com", age: 25 });
+        const isSaving = ref(false);
+        const logs = ref([]);
+        watch(user, (newUser) => {
+          const timestamp = new Date().toLocaleTimeString();
+          logs.value.unshift('[' + timestamp + '] 用户信息已更新: ' + JSON.stringify(newUser));
+          isSaving.value = true;
+          setTimeout(() => { isSaving.value = false; }, 1000);
+          if (logs.value.length > 10) logs.value.pop();
+        }, { deep: true, immediate: true });
+        return { user, isSaving, logs };
+      }
+    }).mount("#app");
+  <\/script>
+</body>
+</html>`
+
+const watchEffectHTML = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>watchEffect 示例</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"><\/script>
+  <style>
+    body { font-family: Arial; max-width: 700px; margin: 50px auto; padding: 20px; }
+    .controls { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
+    .control-group { background: #f9f9f9; padding: 15px; border-radius: 8px; }
+    .control-group label { display: block; font-weight: bold; margin-bottom: 8px; }
+    .control-group input { width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 4px; }
+    .preview { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; margin-bottom: 20px; transition: all 0.3s; }
+    .console-log { background: #1e1e1e; color: #0f0; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 12px; max-height: 150px; overflow-y: auto; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>watchEffect 自动追踪示例</h1>
+    <div class="controls">
+      <div class="control-group"><label>文本内容：</label><input v-model="text" /></div>
+      <div class="control-group"><label>字体大小：</label><input v-model.number="fontSize" type="range" min="12" max="48" /><span>{{ fontSize }}px</span></div>
+      <div class="control-group"><label>背景颜色：</label><input v-model="bgColor" type="color" /></div>
+      <div class="control-group"><label>文字颜色：</label><input v-model="textColor" type="color" /></div>
+    </div>
+    <div class="preview" :style="{ backgroundColor: bgColor, color: textColor, fontSize: fontSize + 'px' }">{{ text }}</div>
+    <h3>watchEffect 追踪日志：</h3>
+    <div class="console-log"><div v-for="(log, index) in logs" :key="index">{{ log }}</div></div>
+  </div>
+  <script>
+    const { createApp, ref, watchEffect } = Vue;
+    createApp({
+      setup() {
+        const text = ref("Hello Vue3");
+        const fontSize = ref(24);
+        const bgColor = ref("#42b983");
+        const textColor = ref("#ffffff");
+        const logs = ref([]);
+        watchEffect(() => {
+          const timestamp = new Date().toLocaleTimeString();
+          const logMessage = '[' + timestamp + '] 检测到变化 - 文本: "' + text.value + '", 字号: ' + fontSize.value + 'px, 背景: ' + bgColor.value + ', 文字: ' + textColor.value;
+          logs.value.unshift(logMessage);
+          if (logs.value.length > 8) logs.value.pop();
+        });
+        return { text, fontSize, bgColor, textColor, logs };
+      }
+    }).mount("#app");
+  <\/script>
+</body>
+</html>`
+
+const todoAppHTML = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>智能待办事项</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"><\/script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+    .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); padding: 30px; }
+    h1 { color: #333; margin-bottom: 10px; }
+    .stats { display: flex; gap: 15px; margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px; }
+    .stat { flex: 1; text-align: center; }
+    .stat-value { font-size: 24px; font-weight: bold; color: #667eea; }
+    .stat-label { font-size: 12px; color: #666; margin-top: 5px; }
+    .add-form { display: flex; gap: 10px; margin-bottom: 20px; }
+    .add-form input { flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 16px; }
+    .add-form button { padding: 12px 24px; background: #667eea; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: bold; }
+    .filter-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+    .filter-tabs button { flex: 1; padding: 10px; border: 2px solid #ddd; background: white; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    .filter-tabs button.active { background: #667eea; color: white; border-color: #667eea; }
+    .todo-list { list-style: none; }
+    .todo-item { display: flex; align-items: center; padding: 15px; background: #f9f9f9; border-radius: 8px; margin-bottom: 10px; }
+    .todo-item.completed { opacity: 0.6; }
+    .todo-item input[type="checkbox"] { width: 20px; height: 20px; margin-right: 15px; cursor: pointer; }
+    .todo-item .text { flex: 1; font-size: 16px; }
+    .todo-item.completed .text { text-decoration: line-through; color: #999; }
+    .todo-item button { padding: 6px 12px; background: #ff4757; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    .progress-bar { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; margin-bottom: 20px; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); transition: width 0.3s; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+      <h1>📝 智能待办事项</h1>
+      <div class="progress-bar"><div class="progress-bar-fill" :style="{ width: completionRate + '%' }"></div></div>
+      <div class="stats">
+        <div class="stat"><div class="stat-value">{{ totalCount }}</div><div class="stat-label">总任务</div></div>
+        <div class="stat"><div class="stat-value">{{ activeCount }}</div><div class="stat-label">待完成</div></div>
+        <div class="stat"><div class="stat-value">{{ completedCount }}</div><div class="stat-label">已完成</div></div>
+        <div class="stat"><div class="stat-value">{{ completionRate }}%</div><div class="stat-label">完成率</div></div>
+      </div>
+      <div class="add-form">
+        <input v-model="newTodo" @keyup.enter="addTodo" placeholder="添加新任务..." />
+        <button @click="addTodo">添加</button>
+      </div>
+      <div class="filter-tabs">
+        <button :class="{ active: filter === 'all' }" @click="filter = 'all'">全部 ({{ totalCount }})</button>
+        <button :class="{ active: filter === 'active' }" @click="filter = 'active'">待完成 ({{ activeCount }})</button>
+        <button :class="{ active: filter === 'completed' }" @click="filter = 'completed'">已完成 ({{ completedCount }})</button>
+      </div>
+      <ul class="todo-list">
+        <li v-for="todo in filteredTodos" :key="todo.id" class="todo-item" :class="{ completed: todo.completed }">
+          <input type="checkbox" v-model="todo.completed" />
+          <span class="text">{{ todo.text }}</span>
+          <button @click="removeTodo(todo.id)">删除</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <script>
+    const { createApp, ref, computed, watch } = Vue;
+    createApp({
+      setup() {
+        const todos = ref([
+          { id: 1, text: "学习 Vue3 计算属性", completed: true },
+          { id: 2, text: "学习 Vue3 侦听器", completed: false },
+          { id: 3, text: "完成练习项目", completed: false }
+        ]);
+        const newTodo = ref("");
+        const filter = ref("all");
+        let nextId = 4;
+        const totalCount = computed(() => todos.value.length);
+        const activeCount = computed(() => todos.value.filter(todo => !todo.completed).length);
+        const completedCount = computed(() => todos.value.filter(todo => todo.completed).length);
+        const completionRate = computed(() => {
+          if (totalCount.value === 0) return 0;
+          return Math.round((completedCount.value / totalCount.value) * 100);
+        });
+        const filteredTodos = computed(() => {
+          if (filter.value === "active") return todos.value.filter(todo => !todo.completed);
+          if (filter.value === "completed") return todos.value.filter(todo => todo.completed);
+          return todos.value;
+        });
+        const addTodo = () => {
+          if (newTodo.value.trim()) {
+            todos.value.push({ id: nextId++, text: newTodo.value, completed: false });
+            newTodo.value = "";
+          }
+        };
+        const removeTodo = (id) => {
+          const index = todos.value.findIndex(todo => todo.id === id);
+          if (index > -1) todos.value.splice(index, 1);
+        };
+        watch(todos, (newTodos) => { localStorage.setItem("todos", JSON.stringify(newTodos)); }, { deep: true });
+        watch(completionRate, (newRate, oldRate) => {
+          if (newRate === 100 && oldRate < 100) {
+            setTimeout(() => { alert("🎉 恭喜！所有任务都完成了！"); }, 300);
+          }
+        });
+        const savedTodos = localStorage.getItem("todos");
+        if (savedTodos) {
+          todos.value = JSON.parse(savedTodos);
+          nextId = Math.max(...todos.value.map(t => t.id)) + 1;
+        }
+        return { todos, newTodo, filter, totalCount, activeCount, completedCount, completionRate, filteredTodos, addTodo, removeTodo };
+      }
+    }).mount("#app");
+  <\/script>
+</body>
+</html>`
+</script>
+
+<style scoped>
+.lesson-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.lesson-header {
+  margin-bottom: 32px;
+}
+
+.lesson-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 12px;
+}
+
+.lesson-subtitle {
+  font-size: 18px;
+  color: #5d6d7e;
+  line-height: 1.6;
+}
+
+.lesson-content {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.content-section {
+  margin-bottom: 48px;
+}
+
+.content-section h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid #42b983;
+}
+
+.content-section h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #34495e;
+  margin: 24px 0 12px;
+}
+
+.content-section p {
+  line-height: 1.8;
+  color: #34495e;
+  margin-bottom: 16px;
+}
+
+code {
+  background: #f6f8fa;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 0.9em;
+  color: #e83e8c;
+}
+
+.info-box {
+  background: #f0f9ff;
+  border-left: 4px solid #3b82f6;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 4px;
+}
+
+.info-box h3 {
+  font-size: 18px;
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #1e40af;
+}
+
+.info-box p {
+  margin-bottom: 12px;
+}
+
+.comparison-code {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+@media (max-width: 768px) {
+  .comparison-code {
+    grid-template-columns: 1fr;
+  }
+}
+
+.code-bad,
+.code-good,
+.code-column {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+}
+
+.code-bad {
+  border-color: #ff4757;
+}
+
+.code-good {
+  border-color: #42b983;
+}
+
+.code-bad h4,
+.code-good h4,
+.code-column h4 {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+
+.code-bad pre,
+.code-good pre,
+.code-column pre {
+  background: #1f2937;
+  color: #f9fafb;
+  padding: 12px;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 0;
+}
+
+.code-bad code,
+.code-good code,
+.code-column code {
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+
+.demo-box {
+  background: #fefce8;
+  padding: 24px;
+  border-radius: 8px;
+  margin: 24px 0;
+  border: 2px solid #fbbf24;
+}
+
+.comparison-demo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 16px;
+}
+
+@media (max-width: 768px) {
+  .comparison-demo {
+    grid-template-columns: 1fr;
+  }
+}
+
+.demo-column {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.demo-column h4 {
+  margin: 0 0 16px;
+  color: #1f2937;
+}
+
+.demo-column p {
+  margin: 8px 0;
+}
+
+.demo-button {
+  padding: 10px 20px;
+  background: #42b983;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  margin: 12px 0;
+}
+
+.demo-button:hover {
+  background: #359268;
+}
+
+.note {
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+  margin-top: 12px;
+}
+
+.tip-box {
+  background: #f0fdf4;
+  border-left: 4px solid #22c55e;
+  padding: 16px;
+  margin: 20px 0;
+  border-radius: 4px;
+  color: #166534;
+}
+
+.tip-box ul {
+  margin: 12px 0 0;
+  padding-left: 24px;
+}
+
+.tip-box li {
+  margin: 6px 0;
+  line-height: 1.6;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  background: white;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #e5e7eb;
+}
+
+.comparison-table th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+}
+
+.comparison-table td {
+  color: #4b5563;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.feature-card {
+  background: #f9fafb;
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+}
+
+.feature-card h4 {
+  margin: 0 0 12px;
+  color: #1f2937;
+}
+
+.feature-card pre {
+  background: #1f2937;
+  color: #f9fafb;
+  padding: 12px;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 12px 0;
+}
+
+.feature-card code {
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+
+.feature-card p {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.highlight-box {
+  background: #fef3c7;
+  padding: 24px;
+  border-radius: 8px;
+  border-left: 4px solid #f59e0b;
+  margin: 24px 0;
+}
+
+.highlight-box h3 {
+  margin-top: 0;
+  color: #92400e;
+}
+
+.highlight-box ul {
+  margin: 12px 0 0;
+  padding-left: 24px;
+}
+
+.highlight-box li {
+  margin: 8px 0;
+  line-height: 1.6;
+  color: #78350f;
+}
+
+.summary-box {
+  background: #f0f9ff;
+  padding: 24px;
+  border-radius: 8px;
+  border-left: 4px solid #3b82f6;
+}
+
+.summary-box h3 {
+  font-size: 18px;
+  margin: 16px 0 8px;
+  color: #1e40af;
+}
+
+.summary-box h3:first-child {
+  margin-top: 0;
+}
+
+.summary-box ul {
+  margin: 0 0 16px;
+  padding-left: 24px;
+}
+
+.summary-box li {
+  margin: 8px 0;
+  line-height: 1.6;
+  color: #1e3a8a;
+}
+
+.next-lesson {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 24px;
+  border-radius: 12px;
+  text-align: center;
+  margin-top: 48px;
+}
+
+.next-lesson h3 {
+  margin: 0 0 12px;
+  font-size: 20px;
+}
+
+.next-lesson p {
+  margin: 0 0 20px;
+  opacity: 0.9;
+}
+
+.next-button {
+  display: inline-block;
+  padding: 12px 32px;
+  background: white;
+  color: #667eea;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: transform 0.2s;
+}
+
+.next-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+</style>

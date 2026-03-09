@@ -1,0 +1,55 @@
+{
+  "name": "create-learning-site",
+  "version": "1.0.0",
+  "description": "创建基于Vue3的交互式学习网站，支持任何编程语言或技术主题",
+  "author": "Learning Platform Generator",
+  "type": "generator",
+  "command": "node generator.js",
+  "parameters": {
+    "topic": {
+      "type": "string",
+      "description": "学习主题（如：Rust, Python, Go, TypeScript等）",
+      "required": true
+    },
+    "topicIcon": {
+      "type": "string",
+      "description": "主题图标（emoji）",
+      "default": "📚"
+    },
+    "outputDir": {
+      "type": "string",
+      "description": "输出目录路径",
+      "required": true
+    },
+    "modules": {
+      "type": "array",
+      "description": "课程模块配置",
+      "default": []
+    }
+  },
+  "features": [
+    "Vue3 + Vite 快速开发环境",
+    "Material Design UI 设计系统",
+    "在线代码编辑器（CodeEditor组件）",
+    "响应式布局（桌面端 + 移动端）",
+    "课程导航和进度追踪",
+    "45+ CSS变量设计系统",
+    "可折叠侧边栏",
+    "主题切换支持"
+  ],
+  "usage": "claude create-learning-site --topic=\"Rust\" --outputDir=\"./rust-learning-site\"",
+  "examples": [
+    {
+      "description": "创建Rust学习网站",
+      "command": "claude create-learning-site --topic=\"Rust\" --topicIcon=\"🦀\" --outputDir=\"../rust-learning\""
+    },
+    {
+      "description": "创建Python学习网站",
+      "command": "claude create-learning-site --topic=\"Python\" --topicIcon=\"🐍\" --outputDir=\"../python-learning\""
+    },
+    {
+      "description": "创建Go学习网站",
+      "command": "claude create-learning-site --topic=\"Go\" --topicIcon=\"🔵\" --outputDir=\"../go-learning\""
+    }
+  ]
+}

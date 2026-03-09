@@ -1,0 +1,490 @@
+/* ==================== 基础重置 ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ==================== CSS 变量定义 ==================== */
+:root {
+    /* 主色 */
+    --primary-blue: #1a73e8;
+    --primary-blue-hover: #1557b0;
+    --primary-blue-light: #e8f0fe;
+
+    /* 文本 */
+    --text-primary: #202124;
+    --text-secondary: #5f6368;
+
+    /* 背景 */
+    --background: #ffffff;
+    --surface: #f8f9fa;
+
+    /* 边框 */
+    --border: #dadce0;
+
+    /* 语义颜色 */
+    --success-bg: #e6f4ea;
+    --success-text: #137333;
+    --warning-bg: #fef7e0;
+    --warning-text: #b06000;
+    --error-bg: #fce8e6;
+    --error-text: #c5221f;
+    --info-bg: #e8f0fe;
+    --info-text: #1967d2;
+
+    /* 阴影 */
+    --shadow: 0 1px 2px 0 rgba(60,64,67,0.3),
+              0 1px 3px 1px rgba(60,64,67,0.15);
+    --shadow-hover: 0 1px 3px 0 rgba(60,64,67,0.3),
+                    0 4px 8px 3px rgba(60,64,67,0.15);
+    --shadow-raised: 0 2px 4px 0 rgba(60,64,67,0.3),
+                     0 4px 8px 3px rgba(60,64,67,0.15);
+    --shadow-deep: 0 4px 8px 0 rgba(60,64,67,0.3),
+                   0 8px 16px 6px rgba(60,64,67,0.15);
+
+    /* 间距 */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+    --space-3xl: 64px;
+
+    /* 动画 */
+    --ease-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
+    --ease-decelerate: cubic-bezier(0.0, 0.0, 0.2, 1);
+    --ease-accelerate: cubic-bezier(0.4, 0.0, 1, 1);
+
+    --duration-fast: 150ms;
+    --duration-normal: 200ms;
+    --duration-slow: 300ms;
+}
+
+/* ==================== 全局样式 ==================== */
+body {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    line-height: 1.6;
+    color: var(--text-primary);
+    background: var(--background);
+    overflow-x: hidden;
+}
+
+code, pre {
+    font-family: 'SF Mono', Monaco, 'Cascadia Code', Consolas, monospace;
+}
+
+/* ==================== 按钮组件 ==================== */
+.btn {
+    padding: 10px 24px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-standard);
+    border: none;
+    outline: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: var(--primary-blue);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-blue-hover);
+    box-shadow: var(--shadow);
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--primary-blue);
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+    background: var(--surface);
+    border-color: var(--primary-blue);
+}
+
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background var(--duration-normal) var(--ease-standard);
+    font-size: 20px;
+}
+
+.btn-icon:hover {
+    background: var(--surface);
+}
+
+/* ==================== 卡片组件 ==================== */
+.card {
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: var(--space-lg);
+    box-shadow: var(--shadow);
+}
+
+.card-interactive {
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: all var(--duration-slow) var(--ease-standard);
+    transform-origin: center;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.card-interactive:hover {
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary-blue);
+    transform: scale(1.02);
+    z-index: 1;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.card-body {
+    margin-top: 12px;
+}
+
+/* ==================== 徽章组件 ==================== */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.badge-success {
+    background: var(--success-bg);
+    color: var(--success-text);
+}
+
+.badge-warning {
+    background: var(--warning-bg);
+    color: var(--warning-text);
+}
+
+.badge-error {
+    background: var(--error-bg);
+    color: var(--error-text);
+}
+
+.badge-info {
+    background: var(--info-bg);
+    color: var(--info-text);
+}
+
+/* ==================== 导航栏 ==================== */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: var(--background);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 var(--space-lg);
+    z-index: 100;
+    box-shadow: 0 1px 2px rgba(60,64,67,0.1);
+}
+
+.navbar-brand {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.navbar-menu {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+}
+
+/* ==================== 侧边栏 ==================== */
+.sidebar {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    width: 280px;
+    height: calc(100vh - 64px);
+    background: var(--background);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 99;
+}
+
+.sidebar-header {
+    padding: 24px;
+    border-bottom: 1px solid var(--border);
+}
+
+.sidebar-section {
+    padding: 16px 0;
+}
+
+.sidebar-section-title {
+    padding: 8px 24px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sidebar-item {
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-standard);
+    border-left: 3px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.sidebar-item:hover {
+    background: var(--surface);
+}
+
+.sidebar-item.active {
+    background: var(--info-bg);
+    border-left-color: var(--primary-blue);
+    color: var(--primary-blue);
+    font-weight: 500;
+}
+
+/* ==================== 主内容区域 ==================== */
+.main-content {
+    margin-top: 64px;
+    margin-left: 280px;
+    padding: var(--space-xl);
+    min-height: calc(100vh - 64px);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ==================== 代码块样式 ==================== */
+.code-block {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 16px 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.code-block pre {
+    margin: 0;
+}
+
+.code-inline {
+    background: var(--surface);
+    color: var(--error-text);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+/* ==================== 演示区域 ==================== */
+.demo-box {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin: 16px 0;
+    background: var(--surface);
+}
+
+.demo-result {
+    background: white;
+    border: 2px dashed var(--border);
+    border-radius: 4px;
+    padding: 20px;
+    margin-top: 16px;
+    min-height: 100px;
+}
+
+/* ==================== 工具类 ==================== */
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.bg-surface { background: var(--surface); }
+
+.p-sm { padding: var(--space-sm); }
+.p-md { padding: var(--space-md); }
+.p-lg { padding: var(--space-lg); }
+
+.m-sm { margin: var(--space-sm); }
+.m-md { margin: var(--space-md); }
+.m-lg { margin: var(--space-lg); }
+.mt-lg { margin-top: var(--space-lg); }
+.mb-lg { margin-bottom: var(--space-lg); }
+
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+
+.gap-sm { gap: var(--space-sm); }
+.gap-md { gap: var(--space-md); }
+.gap-lg { gap: var(--space-lg); }
+
+/* ==================== 页面标题 ==================== */
+.page-title {
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+}
+
+.page-subtitle {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+}
+
+/* ==================== 章节样式 ==================== */
+.section {
+    margin-bottom: 48px;
+}
+
+.section-title {
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+}
+
+.section-content {
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* ==================== 列表样式 ==================== */
+.lesson-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+}
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 768px) {
+    .sidebar {
+        left: -280px;
+        transition: left var(--duration-slow) var(--ease-standard);
+    }
+
+    .sidebar.open {
+        left: 0;
+        box-shadow: var(--shadow-deep);
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: var(--space-md);
+    }
+
+    .navbar-brand {
+        font-size: 18px;
+    }
+
+    .page-title {
+        font-size: 24px;
+    }
+
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==================== 滚动条样式 ==================== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+/* ==================== 动画 ==================== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn var(--duration-slow) var(--ease-decelerate);
+}
